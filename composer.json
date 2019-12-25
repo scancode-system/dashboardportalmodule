@@ -1,0 +1,25 @@
+{
+    "name": "nwidart/dashboardportal",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\DashboardPortal\\Providers\\DashboardPortalServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\DashboardPortal\\": ""
+        }
+    }
+}
