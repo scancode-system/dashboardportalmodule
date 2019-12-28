@@ -15,8 +15,6 @@ class FileService {
             Storage::disk('local')->put('token/files.zip', $data, 'public');
             self::extract(storage_path('app/token/files.zip'));
             unlink(storage_path('app/token/files.zip'));
-            self::products();
-            self::logo();
         }
     }
 
@@ -36,24 +34,6 @@ class FileService {
             if (is_file($file))
                 unlink($file);
         } 
-    }
-
-    public static function products()
-    {
-        $files = Storage::files('token/images/produtos');
-        foreach ($files as $file) {
-            $file_name = str_replace('token/images/produtos/', '', $file);
-            if(Storage::exists('public/produtos/'.$file_name)){
-                Storage::delete('public/produtos/'.$file_name);
-            }
-            Storage::copy($file, 'public/produtos/'.$file_name);
-        }
-    }
-
-    public static function logo()
-    {
-        Storage::disk('public')->put('companies/logo/logo.png', file_get_contents(storage_path('app/token/images/logo/logo.png')), 'public');
-        CompanyRepository::updateLogo('storage/companies/logo/logo.png');
     }
 
 }
