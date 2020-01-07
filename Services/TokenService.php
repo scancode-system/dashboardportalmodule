@@ -3,7 +3,7 @@
 namespace Modules\DashboardPortal\Services;
 
 use Modules\DashboardPortal\Services\PortalApiService;
-use Modules\DashboardPortal\Services\SessionService;
+use Modules\ImportWidget\Services\SessionService;
 use Modules\DashboardPortal\Services\FileService;
 use Exception;
 
@@ -21,24 +21,26 @@ class TokenService {
             $this->password = $token_exploded[1];
             $this->event = $token_exploded[2];
         } else {
-            SessionService::setMessage('Token Inválido.');
+            SessionService::message('token', 'Token Inválido.');
             throw new Exception("Token inválido");
         }
     }
 
     public function import() {
-        SessionService::setMessage('Conectando ao portal.');
+        SessionService::start('token');
+
+        SessionService::message('token', 'Conectando ao portal.');
         $portal_api_service = new PortalApiService($this->login, $this->password, $this->event);
         if($portal_api_service->check())
         {
-            SessionService::setMessage('Buscando dados do evento.');
+            SessionService::message('token', 'Buscando dados do evento.');
             $imports = json_decode($portal_api_service->event()->data);
             
-            SessionService::setMessage('Fazendo Download de arquivos e imagens.');
+            SessionService::message('token', 'Fazendo Download de arquivos e imagens.');
             FileService::storage($portal_api_service->download());
             
 
-            //dd($imports->images); 
+            SessionService::message('token', 'Configurando imagens.');
             foreach ($imports->images as $import_image) 
             {
                 $class_method = explode('@', $import_image->portal_service);
@@ -51,6 +53,7 @@ class TokenService {
                 $import_service->$method($import_image->data);
             }
 
+            SessionService::message('token', 'Atualizando informações no sistema.');
             foreach ($imports->settings as $setting) 
             {
                 $class_method = explode('@', $setting->portal_service);
@@ -63,22 +66,29 @@ class TokenService {
                 $import_service->$method((array)$setting->data);
             }
 
-            foreach ($imports->validations as $validation) 
+            SessionService::message('token', 'Iniciando importação de registros.');
+            $validations = collect($imports->validations)->reverse();
+            SessionService::widgetsReset('token');
+            foreach ($validations as $validation) 
             {
+                //SessionService::setWidgetName($validation->portal_service);
+                //SessionService::startWidgetNew();
                 $class_method = explode('@', $validation->portal_service);
                 $module = $class_method[0];
                 $method = $class_method[1];
 
+                SessionService::clear($module, $method);
+                SessionService::widgetsAdd('token', $module, $method);
+
                 $path_class = 'Modules\\'.$module.'\\Services\\ImportService';
                 $import_service = new $path_class();
-
                 $import_service->$method($validation->data);
             }
+            SessionService::setMessage('token', 'Importação concluida.');
         } else {
-            SessionService::setMessage('Não foi possível conectar ao portal.');
+            SessionService::setMessage('token', 'Não foi possível conectar ao portal.');
         }
+        SessionService::end('token');
     }
-
-    public function data($view){}
 
 }

@@ -36,7 +36,17 @@
 
 		var interval = setInterval(function(){
 			$("#container_import").load('{{ route('dashboardportal.update') }}');
-		}, 2000);
+			/*$.get('{{ route('dashboardportal.check') }}', function(response) 
+			{
+				console.log(response);
+				if(!response.data)
+				{
+					clearInterval(interval);
+					$("#token").prop("disabled", false);
+					$("#btn_token").prop("disabled", false);
+				}
+			});*/
+		}, 1000);
 
 		$.ajax({url: '{{ route('dashboardportal.token') }}',
 			type: 'post',
@@ -44,11 +54,33 @@
 			headers: {'X-CSRF-Token': "{{ csrf_token() }}"}
 		}).always(function(data) {
 			clearInterval(interval);
+			$("#container_import").load('{{ route('dashboardportal.update') }}');
+			
 			$("#token").prop("disabled", false);
 			$("#btn_token").prop("disabled", false);
+			$("#token").val('');
 		});
 
+		//$("#container_import").load('{{ route('dashboardportal.check') }}');
 	});
+
+
+
+	/*$.get('{{ route('dashboardportal.check') }}', function(response) 
+	{
+		if(!response.data)
+		{
+			$("#token").prop("disabled", false);
+			$("#btn_token").prop("disabled", false);
+		} else {
+			var interval = setInterval(function(){
+				$("#container_import").load('{{ route('dashboardportal.update') }}');
+			}, 2000);
+		}
+	});*/
+
+
+
 </script>
 @endpush
 

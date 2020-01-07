@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\DashboardPortal\Services\TokenService;
-use Modules\DashboardPortal\Services\UpdateService;
+use Modules\DashboardPortal\Services\SessionService;
 
 class DashboardPortalController extends Controller
 {
@@ -24,9 +24,17 @@ class DashboardPortalController extends Controller
 
     public function update(Request $request)
     {
-        $update_service = new UpdateService();
-        $response = $update_service->update();
-        return $response;
+        return view('dashboardportal::update');
+    }
+
+    public function check(Request $request)
+    {
+        return response()->json(['importing' => SessionService::importing()]);
+    }
+
+    public function reportFailures(Request $request, $file_name)
+    {
+        return response()->download(storage_path('app/failures/'.$file_name));
     }
 
 }

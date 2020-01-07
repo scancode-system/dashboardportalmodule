@@ -1,5 +1,5 @@
 {
-    "name": "nwidart/dashboardportal",
+    "name": "scancode-system/dashboardportal-module",
     "description": "",
     "authors": [
         {
@@ -21,5 +21,6 @@
         "psr-4": {
             "Modules\\DashboardPortal\\": ""
         }
-    }
+    },
+    "type": "laravel-module"
 }
