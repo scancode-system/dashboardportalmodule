@@ -84,9 +84,9 @@ class TokenService {
                 $import_service = new $path_class();
                 $import_service->$method($validation->data);
             }
-            SessionService::setMessage('token', 'Importação concluida.');
+            SessionService::message('token', 'Importação concluida.');
         } else {
-            SessionService::setMessage('token', 'Não foi possível conectar ao portal.');
+            SessionService::message('token', 'Não foi possível conectar ao portal.');
         }
         SessionService::end('token');
     }
