@@ -13,7 +13,7 @@
                 "Modules\\DashboardPortal\\Providers\\DashboardPortalServiceProvider"
             ],
             "aliases": {
-                
+
             }
         }
     },
@@ -22,5 +22,11 @@
             "Modules\\DashboardPortal\\": ""
         }
     },
-    "type": "laravel-module"
+    "type": "laravel-module",
+    "require": {
+        "scancode-system/client-module":"^1.0",
+        "scancode-system/saller-module":"^1.0",
+        "scancode-system/payment-module":"^1.0",
+        "scancode-system/product-module":"^1.0",
+    }
 }
