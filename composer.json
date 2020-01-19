@@ -27,6 +27,6 @@
         "scancode-system/client-module":"^1.0",
         "scancode-system/saller-module":"^1.0",
         "scancode-system/payment-module":"^1.0",
-        "scancode-system/product-module":"^1.0",
+        "scancode-system/product-module":"^1.0"
     }
 }
