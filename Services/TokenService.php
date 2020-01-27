@@ -5,6 +5,7 @@ namespace Modules\DashboardPortal\Services;
 use Modules\DashboardPortal\Services\PortalApiService;
 use Modules\ImportWidget\Services\SessionService;
 use Modules\DashboardPortal\Services\FileService;
+use Nwidart\Modules\Facades\Module;
 use Exception;
 
 class TokenService {
@@ -35,11 +36,10 @@ class TokenService {
         {
             SessionService::message('token', 'Buscando dados do evento.');
             $imports = json_decode($portal_api_service->event()->data);
-            
+
             SessionService::message('token', 'Fazendo Download de arquivos e imagens.');
             FileService::storage($portal_api_service->download());
             
-
             SessionService::message('token', 'Configurando imagens.');
             foreach ($imports->images as $import_image) 
             {
@@ -53,6 +53,17 @@ class TokenService {
                 $import_service->$method($import_image->data);
             }
 
+            SessionService::message('token', 'Configurando empresa.');
+            $class_method = explode('@', $imports->company->portal_service);
+            $module = $class_method[0];
+            $method = $class_method[1];
+
+            $path_class = 'Modules\\'.$module.'\\Services\\ImportService';
+            $import_service = new $path_class();
+
+            $import_service->$method($imports->company->data);
+
+
             SessionService::message('token', 'Atualizando informações no sistema.');
             foreach ($imports->settings as $setting) 
             {
@@ -60,10 +71,14 @@ class TokenService {
                 $module = $class_method[0];
                 $method = $class_method[1];
 
-                $path_class = 'Modules\\'.$module.'\\Services\\ImportService';
-                $import_service = new $path_class();
+                if(Module::has($module))
+                {
+                    $path_class = 'Modules\\'.$module.'\\Services\\ImportService';
+                    $import_service = new $path_class();
 
-                $import_service->$method((array)$setting->data);
+                    Module::has($module);
+                    $import_service->$method((array)$setting->data);
+                }
             }
 
             SessionService::message('token', 'Iniciando importação de registros.');
