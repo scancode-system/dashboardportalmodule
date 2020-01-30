@@ -53,6 +53,7 @@ class TokenService {
                 $import_service->$method($import_image->data);
             }
 
+            //dd($imports->company->data);
             SessionService::message('token', 'Configurando empresa.');
             $class_method = explode('@', $imports->company->portal_service);
             $module = $class_method[0];
