@@ -83,7 +83,7 @@ class TokenService {
             }
 
             SessionService::message('token', 'Iniciando importação de registros.');
-            $validations = collect($imports->validations)->reverse();
+            $validations = collect($imports->validations);
             SessionService::widgetsReset('token');
             foreach ($validations as $validation) 
             {
