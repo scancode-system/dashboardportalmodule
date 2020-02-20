@@ -29,6 +29,7 @@ class TokenService {
 
     public function import() {
         SessionService::start('token');
+        SessionService::widgetsReset('token');
 
         SessionService::message('token', 'Conectando ao portal.');
         $portal_api_service = new PortalApiService($this->login, $this->password, $this->event);
@@ -84,7 +85,6 @@ class TokenService {
 
             SessionService::message('token', 'Iniciando importação de registros.');
             $validations = collect($imports->validations);
-            SessionService::widgetsReset('token');
             foreach ($validations as $validation) 
             {
                 //SessionService::setWidgetName($validation->portal_service);
