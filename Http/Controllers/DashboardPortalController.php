@@ -7,14 +7,27 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\DashboardPortal\Services\TokenService;
 use Modules\DashboardPortal\Services\SessionService;
+use Modules\DashboardPortal\Repositories\SettingPortalRepository;
+
 
 class DashboardPortalController extends Controller
 {
 
     public function index()
     {
-        return view('dashboardportal::index');
+        return view('dashboardportal::index', ['setting_portal' => SettingPortalRepository::load()]);
     }
+
+    public function import()
+    {
+        return view('dashboardportal::import');
+    }
+
+    public function export()
+    {
+        return view('dashboardportal::export');
+    }
+
 
     public function token(Request $request)
     {

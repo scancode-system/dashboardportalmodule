@@ -6,6 +6,8 @@ use Modules\DashboardPortal\Services\PortalApiService;
 use Modules\ImportWidget\Services\SessionService;
 use Modules\DashboardPortal\Services\FileService;
 use Nwidart\Modules\Facades\Module;
+use Modules\DashboardPortal\Repositories\SettingPortalRepository;
+use Carbon\Carbon;
 use Exception;
 
 class TokenService {
@@ -101,10 +103,12 @@ class TokenService {
                 $import_service->$method($validation->data);
             }
             SessionService::message('token', 'Importação concluida.');
+            SettingPortalRepository::update(['last_import' => Carbon::now()]);
         } else {
             SessionService::message('token', 'Não foi possível conectar ao portal.');
         }
         SessionService::end('token');
+
     }
 
 }
