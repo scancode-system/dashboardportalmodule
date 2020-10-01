@@ -5,7 +5,7 @@
 {{ Form::open(['route' => 'dashboardportal.token', 'method' => 'get', 'id' => 'form_token']) }}
 <div class="form-group">
 	<div class="input-group">
-		{{ Form::text('token', null, ['class' => 'form-control', 'placeholder' => 'Importação dos dados', 'id' => 'token']) }}
+		{{ Form::text('token', $token, ['class' => 'form-control', 'placeholder' => 'Importação dos dados', 'id' => 'token']) }}
 		<span class="input-group-append">
 			{{ Form::button('<i class="fa fa-key"></i>', ['class' => 'btn btn-primary', 'type' => 'submit', 'id' => 'btn_token']) }}
 		</span>

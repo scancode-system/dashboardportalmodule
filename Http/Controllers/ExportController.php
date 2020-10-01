@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\DashboardPortal\Services\Export\PortalUpdateService;
+use Illuminate\Support\Facades\Storage;
 
 class ExportController extends Controller
 {
@@ -21,6 +22,16 @@ class ExportController extends Controller
 
     public function progress(Request $request){
         return view('dashboardportal::export.progress');
+    }
+
+    public function auto(Request $request){
+        if($request->action == 'save'){
+            Storage::put('exportauto/time', $request->auto);
+            return back()->with('success', 'Horário automatizado salvo.');
+        } else {
+            Storage::delete('exportauto/time');
+            return back()->with('success', 'Atualização automatica desativada.');
+        }
     }
 
 }

@@ -2,6 +2,25 @@
 
 @section('content')
 
+@alert_success()
+{{ Form::open(['route' => 'dashboardportal.token.save']) }}
+<div class="form-group">
+	<div class="input-group">
+		<span class="input-group-prepend">
+			{{ Form::button('<i class="fa fa-trash-o"></i>', ['class' => 'btn btn-danger', 'type' => 'submit', 'id' => 'btn_token', 'name' => 'action', 'value' => 'clear']) }}
+		</span>
+		@if(is_null($token))
+		{{ Form::text('token', $token, ['class' => 'form-control', 'placeholder' => 'Importação dos dados', 'id' => 'token']) }}
+		@else
+		{{ Form::text('token', $token, ['class' => 'form-control', 'placeholder' => 'Importação dos dados', 'id' => 'token', 'disabled' => 'disabled']) }}
+		@endif
+		<span class="input-group-append">
+			{{ Form::button('<i class="fa fa-save"></i>', ['class' => 'btn btn-primary', 'type' => 'submit', 'id' => 'btn_token', 'name' => 'action', 'value' => 'save']) }}
+		</span>
+	</div>
+</div>
+{{ Form::close() }}
+
 <div class="row">
 	<div class="col">
 		<a href="{{ route('dashboardportal.import') }}" class="card text-decoration-none">

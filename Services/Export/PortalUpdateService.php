@@ -8,7 +8,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use Modules\Order\Repositories\OrderRepository;
 use Modules\Dashboard\Entities\Report;
 use Modules\Dashboard\Entities\Txt;
+use Modules\DashboardPortal\Repositories\SettingPortalRepository;
 use ZipArchive;
+
 
 
 class PortalUpdateService {
@@ -93,7 +95,9 @@ class PortalUpdateService {
         $response = Http::withBasicAuth($login, $password)->attach('attachment', file_get_contents(storage_path('app/export.zip')), 'arquivo'
     )->post(config('dashboardportal.url'). '/api/pos/'.$event);
         Storage::delete('export.zip');
-        dd($response->body());
+        //dd(json_decode($response->body())->sync);
+        SettingPortalRepository::update(['last_export' => json_decode($response->body())->sync]);
+
     }
 
     private static function uriOldPdf($order){

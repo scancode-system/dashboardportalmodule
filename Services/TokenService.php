@@ -35,6 +35,7 @@ class TokenService {
 
         SessionService::message('token', 'Conectando ao portal.');
         $portal_api_service = new PortalApiService($this->login, $this->password, $this->event);
+
         if($portal_api_service->check())
         {
             SessionService::message('token', 'Buscando dados do evento.');
@@ -56,6 +57,7 @@ class TokenService {
                 $import_service->$method($import_image->data);
             }
 
+
             //dd($imports->company->data);
             SessionService::message('token', 'Configurando empresa.');
             $class_method = explode('@', $imports->company->portal_service);
@@ -66,7 +68,6 @@ class TokenService {
             $import_service = new $path_class();
 
             $import_service->$method($imports->company->data);
-
 
             SessionService::message('token', 'Atualizando informações no sistema.');
             foreach ($imports->settings as $setting) 

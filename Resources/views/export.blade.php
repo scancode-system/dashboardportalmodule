@@ -1,10 +1,28 @@
 @extends('dashboard::layouts.master')
 
 @section('content')
+
+@alert_success()
+{{ Form::open(['route' => 'dashboardportal.export.auto']) }}
+<div class="form-group">
+	{{ Form::label('auto', 'Automatico') }}
+	<div class="input-group">
+		<span class="input-group-prepend">
+			{{ Form::button('<i class="fa fa-trash-o"></i>', ['class' => 'btn btn-danger', 'type' => 'submit', 'id' => 'btn_token', 'name' => 'action', 'value' => 'clear']) }}
+		</span>
+		{{ Form::time('auto', $auto, ['class' => 'form-control']) }}
+		<span class="input-group-append">
+			{{ Form::button('<i class="fa fa-save"></i>', ['class' => 'btn btn-primary', 'type' => 'submit', 'name' => 'action', 'value' => 'save']) }}
+		</span>
+	</div>
+</div>
+{{ Form::close() }}
+
 {{ Form::open(['route' => 'dashboardportal.export.start', 'id' => 'form_token']) }}
 <div class="form-group">
+	{{ Form::label('token', 'Manual') }}
 	<div class="input-group">
-		{{ Form::text('token', null, ['class' => 'form-control', 'placeholder' => 'Token (Exportação)', 'id' => 'token', 'disabled' => 'disabled']) }}
+		{{ Form::text('token', $token, ['class' => 'form-control', 'placeholder' => 'Token (Exportação)', 'id' => 'token', 'disabled' => 'disabled']) }}
 		<span class="input-group-append">
 			{{ Form::button('<i class="fa fa-refresh"></i>', ['class' => 'btn btn-primary', 'type' => 'submit', 'id' => 'btn_token', 'disabled' => 'disabled']) }}
 		</span>

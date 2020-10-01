@@ -5,6 +5,7 @@ namespace Modules\DashboardPortal\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Storage;
 use Modules\DashboardPortal\Services\TokenService;
 use Modules\DashboardPortal\Services\SessionService;
 use Modules\DashboardPortal\Repositories\SettingPortalRepository;
@@ -15,17 +16,43 @@ class DashboardPortalController extends Controller
 
     public function index()
     {
-        return view('dashboardportal::index', ['setting_portal' => SettingPortalRepository::load()]);
+        $token = null;
+        if(Storage::exists('token/token')){
+            $token = Storage::get('token/token');
+        }
+        return view('dashboardportal::index', ['setting_portal' => SettingPortalRepository::load(), 'token' => $token]);
+    }
+
+    public function save(Request $request){
+        if($request->action == 'save'){
+            Storage::put('token/token', $request->token);
+            return back()->with('success', 'Token salvo.');
+        } else {
+            Storage::delete('token/token');
+            return back()->with('success', 'Token removido.');
+        }
     }
 
     public function import()
     {
-        return view('dashboardportal::import');
+        $token = null;
+        if(Storage::exists('token/token')){
+            $token = Storage::get('token/token');
+        }
+        return view('dashboardportal::import', ['token' => $token]);
     }
 
     public function export()
     {
-        return view('dashboardportal::export');
+        $token = null;
+        if(Storage::exists('token/token')){
+            $token = Storage::get('token/token');
+        }
+        $auto = null;
+        if(Storage::exists('exportauto/time')){
+            $auto = Storage::get('exportauto/time');
+        }
+        return view('dashboardportal::export', ['token' => $token, 'auto' => $auto]);
     }
 
 

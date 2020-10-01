@@ -4,6 +4,10 @@ namespace Modules\DashboardPortal\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Console\Scheduling\Schedule;
+use Modules\DashboardPortal\Services\Export\PortalUpdateService;
+use Carbon\Carbon;
 
 class DashboardPortalServiceProvider extends ServiceProvider
 {
@@ -26,6 +30,29 @@ class DashboardPortalServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+
+        if(Storage::exists('exportauto/time')){
+
+            $auto = Storage::get('exportauto/time');
+            $carbon = Carbon::createFromFormat('H:i', $auto);
+            
+            $this->app->booted(function () use($carbon){
+                $schedule = $this->app->make(Schedule::class);
+                $schedule->call(function () {
+
+
+                    if(Storage::exists('token/token')){
+                       $token = Storage::get('token/token');
+                       $portal_update_service = new PortalUpdateService();
+                       $portal_update_service->start($token);
+
+                   }
+
+
+                })->cron($carbon->minute.' '.$carbon->hour.' * * *');
+               //})->cron('* * * * *');
+            });
+        }
     }
 
     /**

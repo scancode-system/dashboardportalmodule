@@ -16,6 +16,10 @@ Route::prefix('dashboardportal')->middleware('auth')->group(function() {
 	// export
 	Route::get('export/check', 'ExportController@check')->name('dashboardportal.export.check');
 	Route::post('export/start', 'ExportController@start')->name('dashboardportal.export.start');
+	Route::post('export/auto', 'ExportController@auto')->name('dashboardportal.export.auto');
 	Route::get('export/progress', 'ExportController@progress')->name('dashboardportal.export.progress');
+
+
+	Route::post('/token/save', 'DashboardPortalController@save')->name('dashboardportal.token.save');
 
 });
