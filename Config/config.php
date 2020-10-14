@@ -1,6 +1,6 @@
 <?php
 
 return [
-	'url' => 'http://scancode.com.br/portal'
+	'url' => 'http://scancode.com.br/portalnovo'
 //  	'url' => 'http://localhost/portal'
 ];
